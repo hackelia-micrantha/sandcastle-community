@@ -28,3 +28,9 @@ Do not post vulnerability details, credentials, private infrastructure informati
 Contributions must not attempt to reconstruct, mirror, or import the private implementation history. Public artifacts should be independently useful and intentionally publishable.
 
 See [docs/repository-boundary.md](docs/repository-boundary.md) for the authority and publication model.
+
+## Community UI
+
+If this repository introduces or materially redesigns user-facing UI, it follows the shared Phyllotaxis community directive by default: **1990s in visual character, not in capability.** Prefer plain, direct, content-first interfaces with obvious browser-native affordances and minimal decorative chrome, while retaining modern accessibility, semantics, responsive behavior, and security.
+
+See the organization-wide [community UI design directive](https://github.com/hackelia-micrantha/.github/blob/main/docs/standards/ui-design.md). Repository-specific deviations should be justified by a concrete product, usability, or accessibility requirement.
