@@ -16,6 +16,10 @@ save -> mutate -> restore -> fork -> inspect/diff
 
 A Sandcastle checkpoint describes concrete execution/workspace state. It does not confer authorization, approval, task completion, or trust.
 
+## Project history
+
+Sandcastle grew from an earlier Docker sandbox utility built around reusable isolated development environments. The archived [Sandbox Demo](https://ryanjennin.gs/archive/sandcastle-util-demo/) captures that origin. This repository remains the curated public authority for current Sandcastle documentation, contracts, examples, and status.
+
 ## What belongs here
 
 This repository is intended for deliberately published material such as:
