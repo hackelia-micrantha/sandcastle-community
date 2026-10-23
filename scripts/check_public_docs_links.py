@@ -14,7 +14,7 @@ PUBLIC_MARKDOWN_GLOBS = ("*.md", "docs/**/*.md")
 REMOTE_SCHEMES = frozenset({"https", "http", "mailto"})
 CODE_FENCE_PREFIXES = (chr(96) * 3, "~" * 3)
 INLINE_LINK = re.compile(
-    r"""!?\[[^\]\n]+\]\(\s*(?P<target><[^>\n]+>|[^\s)]+))(?:\s+(?:"[^"\n]*"|'[^'\n]*'))?\s*\)"""
+    r"""!?\[[^\]\n]+\]\(\s*(?P<target><[^>\n]+>|[^\s)]+)(?:\s+(?:"[^"\n]*"|'[^'\n]*'))?\s*\)"""
 )
 
 
