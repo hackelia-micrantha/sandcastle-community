@@ -63,5 +63,32 @@ class PublicDocsLinkChecks(unittest.TestCase):
         self.assertIn("No public Markdown", "\n".join(check_public_links(self.root)))
 
 
+    def test_empty_label_image_and_link_are_checked(self) -> None:
+        self.write("README.md", "![](docs/missing.png)\n[](docs/missing.md)\n")
+        result = "\n".join(check_public_links(self.root))
+        self.assertEqual(2, result.count("missing link target"))
+
+    def test_inline_code_is_not_interpreted_as_a_link(self) -> None:
+        tick = chr(96)
+        self.write(
+            "README.md",
+            f"{tick}[example](missing.md){tick} [real](README.md)\n"
+            f"{tick * 2}[example](still-missing.md){tick * 2}\n",
+        )
+        self.assertEqual([], check_public_links(self.root))
+
+    def test_four_space_indented_fence_cannot_hide_broken_link(self) -> None:
+        tick = chr(96)
+        self.write("README.md", f"    {tick * 3}\n[missing](missing.md)\n")
+        self.assertIn("missing link target", "\n".join(check_public_links(self.root)))
+
+    def test_character_references_cannot_hide_scheme_or_absolute_path(self) -> None:
+        self.write("javascript&colon;alert", "ordinary local file\n")
+        self.write("README.md", "[unsafe](javascript&colon;alert)\n[abs](&sol;README.md)\n")
+        result = "\n".join(check_public_links(self.root))
+        self.assertIn("unsupported link scheme", result)
+        self.assertIn("absolute link", result)
+
+
 if __name__ == "__main__":
     unittest.main()
