@@ -21,14 +21,24 @@ Review the [README](../README.md), [boundary contract](repository-boundary.md), 
 
 ## Validation and release gates
 
-There is currently **no repository-local public CI/workflow or established automated docs validation command**. Until project-owned [bootstrap issue #1](https://github.com/hackelia-micrantha/sandcastle-community/issues/1) supplies a reviewed least-privilege, credential-free validator:
+Check the actual target `main` revision before selecting a validation command. [Bootstrap issue #1](https://github.com/hackelia-micrantha/sandcastle-community/issues/1) owns the public, credential-free validator; [PR #5](https://github.com/hackelia-micrantha/sandcastle-community/pull/5) is the independently reviewed CI candidate, **not evidence of adoption until merged and receiving-main verified**.
 
-1. Review the exact candidate commit and only its intended public files; inspect all changed Markdown links and verify local target paths on that revision.
-2. Compare all changed public capability, platform, security, and release claims with accepted project-owned evidence; mark unverifiable claims as unknown or planned.
-3. Review public/private classification, applicable contribution licensing decisions, and any new published artifact against the allow-list before merging.
-4. Do not claim build, rendered-site, release-artifact, install, end-to-end, or production verification merely because static links and content were reviewed.
+Where `scripts/check_public_docs_links.py`, `tests/test_public_docs_links.py`, and `.github/workflows/public-docs.yml` are present on the reviewed baseline, run the owning offline checks at the exact candidate SHA:
 
-A future automated validator must not require private Sandcastle credentials or execute untrusted public PR code on a privileged host. Use a project-owned validation workflow if #1 later establishes one; don't create an alternate CI system here.
+```sh
+python3 -m unittest discover -s tests -p 'test_*.py' -v
+python3 scripts/check_public_docs_links.py
+```
+
+Also verify the matching GitHub-hosted `Validate public documentation` check and review its scope: local Markdown targets only, not remote URLs, heading anchors, rendered HTML, or published artifacts. If the three validator files are not yet present, **do not claim CI exists or has passed**; manually inspect every changed relative Markdown target at the exact revision and record that limitation.
+
+For all documentation changes, whether automated validation is available or not:
+
+1. Compare changed capability, platform, security, and release claims with accepted project-owned evidence; mark unsupported claims as unknown or planned.
+2. Check public/private classification, contribution licensing, and any new artifact against the existing publication allow-list.
+3. Do not claim build, rendered-site, release-artifact, install, end-to-end, or production verification merely because static links and content were reviewed.
+
+The public validator must not require private Sandcastle credentials or execute untrusted PR code on a privileged host. Keep validation in the project-owned workflow, not an alternative pipeline.
 
 ## Maintenance triggers
 
