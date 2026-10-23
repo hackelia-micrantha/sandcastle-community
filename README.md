@@ -77,6 +77,10 @@ Package installation grants software availability only. It does not grant checkp
 
 See [Repository Boundary](docs/repository-boundary.md). Public binary distribution is tracked in [#3](https://github.com/hackelia-micrantha/sandcastle-community/issues/3).
 
+## Documentation maintenance
+
+This public distribution and community surface adopts [Micrantha's shared documentation-sync process](docs/documentation-maintenance.md). Its project-local contract records public/private authority, experimental-versus-released claims, manual link/claim validation while public CI is not yet established, and the separate release and publication gates.
+
 ## Contributing
 
 Public issues and contributions are welcome for documentation, contracts, examples, interoperability, distribution metadata, and design feedback. Implementation work may be promoted into the private repository after triage rather than being developed here.
