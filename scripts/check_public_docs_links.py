@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """Check repository-local Markdown link targets without network access.
 
-This is a deliberately bounded check: inline Markdown links, not rendered HTML,
-remote URL availability, reference-style definitions, or heading anchors.
+Deliberately bounded: inline Markdown links, not rendered HTML, remote URL
+availability, reference-style definitions, or heading anchors.
 """
 
+from html import unescape
 from pathlib import Path
 import re
 from urllib.parse import unquote, urlsplit
@@ -12,9 +13,10 @@ from urllib.parse import unquote, urlsplit
 
 PUBLIC_MARKDOWN_GLOBS = ("*.md", "docs/**/*.md")
 REMOTE_SCHEMES = frozenset({"https", "http", "mailto"})
-CODE_FENCE_PREFIXES = (chr(96) * 3, "~" * 3)
+FENCE_MARKER = re.compile(r"^ {0,3}(?P<marker>\x60{3,}|~{3,})(?P<rest>.*)$")
+INLINE_CODE = re.compile(r"(?<![\\\x60])(\x60+)(?!\x60)(.*?)(?<!\\)\1(?!\x60)")
 INLINE_LINK = re.compile(
-    r"""!?\[[^\]\n]+\]\(\s*(?P<target><[^>\n]+>|[^\s)]+)(?:\s+(?:"[^"\n]*"|'[^'\n]*'))?\s*\)"""
+    r"""(?<!\\)!?\[[^\]\n]*\]\(\s*(?P<target><[^>\n]+>|[^\s)]+)(?:\s+(?:"[^"\n]*"|'[^'\n]*'))?\s*\)"""
 )
 
 
@@ -26,21 +28,35 @@ def check_public_links(root: Path) -> list[str]:
         return ["No public Markdown documents found"]
 
     for document in documents:
-        fence: str | None = None
+        fence: tuple[str, int] | None = None
         for number, line in enumerate(document.read_text(encoding="utf-8").splitlines(), 1):
-            stripped = line.lstrip()
-            if stripped.startswith(CODE_FENCE_PREFIXES):
-                marker = stripped[0]
-                if fence is None:
-                    fence = marker
-                elif fence == marker:
-                    fence = None
-                continue
+            marker_match = FENCE_MARKER.match(line)
             if fence is not None:
+                if marker_match:
+                    marker = marker_match.group("marker")
+                    if (
+                        marker[0] == fence[0]
+                        and len(marker) >= fence[1]
+                        and not marker_match.group("rest").strip()
+                    ):
+                        fence = None
                 continue
 
-            for match in INLINE_LINK.finditer(line):
-                href = match.group("target").strip("<>")
+            # Markdown fences permit at most three leading spaces. Four
+            # spaces or a tab is an indented code line, not a fence opener.
+            if line.startswith(("    ", "\t")):
+                continue
+            if marker_match:
+                marker = marker_match.group("marker")
+                fence = (marker[0], len(marker))
+                continue
+
+            # Mask inline code spans without masking links next to them.
+            prose = INLINE_CODE.sub(lambda match: " " * len(match.group()), line)
+            for match in INLINE_LINK.finditer(prose):
+                # CommonMark decodes character references in destinations.
+                # Decode before URI classification to reject disguised schemes.
+                href = unescape(match.group("target").strip("<>"))
                 if href.startswith(("#", "//")):
                     continue
                 parsed = urlsplit(href)
