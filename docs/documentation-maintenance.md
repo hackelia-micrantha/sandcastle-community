@@ -21,7 +21,7 @@ Review the [README](../README.md), [boundary contract](repository-boundary.md), 
 
 ## Validation and release gates
 
-Check the actual target `main` revision before selecting a validation command. [Bootstrap issue #1](https://github.com/hackelia-micrantha/sandcastle-community/issues/1) owns the public, credential-free validator; [PR #5](https://github.com/hackelia-micrantha/sandcastle-community/pull/5) is the independently reviewed CI candidate, **not evidence of adoption until merged and receiving-main verified**.
+Check the actual target `main` revision before selecting a validation command. [Bootstrap issue #1](https://github.com/hackelia-micrantha/sandcastle-community/issues/1) owns the public, credential-free validator; [PR #5](https://github.com/hackelia-micrantha/sandcastle-community/pull/5) is the CI candidate awaiting required independent review and merge authorization, **not evidence of adoption until merged and receiving-main verified**.
 
 Where `scripts/check_public_docs_links.py`, `tests/test_public_docs_links.py`, and `.github/workflows/public-docs.yml` are present on the reviewed baseline, run the owning offline checks at the exact candidate SHA:
 
