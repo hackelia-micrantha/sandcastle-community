@@ -79,7 +79,7 @@ See [Repository Boundary](docs/repository-boundary.md). Public binary distributi
 
 ## Documentation maintenance
 
-This public distribution and community surface adopts [Micrantha's shared documentation-sync process](docs/documentation-maintenance.md). Its project-local contract records public/private authority, experimental-versus-released claims, manual link/claim validation while public CI is not yet established, and the separate release and publication gates.
+This public distribution and community surface adopts [Micrantha's shared documentation-sync process](docs/documentation-maintenance.md). Its project-local contract records public/private authority, experimental-versus-released claims, verification appropriate to the accepted repository validation baseline, and the separate release and publication gates.
 
 ## Contributing
 
